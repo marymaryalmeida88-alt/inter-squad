@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Plug&amp;Play Inter&amp;Act</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --navy:#080F1C;--navy2:#0D1828;
+  --blue:#0096D6;--green:#2EC4A0;--orange:#F97316;--purple:#8B6FC9;--yellow:#D4E600;
+  --w50:rgba(255,255,255,.50);--w40:rgba(255,255,255,.40);--w30:rgba(255,255,255,.30);
+  --w20:rgba(255,255,255,.20);--w12:rgba(255,255,255,.12);--w08:rgba(255,255,255,.08);
+  --w05:rgba(255,255,255,.05);--w03:rgba(255,255,255,.03);
+  --rr:10px;--r2:16px;--r3:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;position:relative;}
+
+/* WATERMARK */
+.watermark{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(-30deg);
+}
+.watermark-text{
+  font-size:clamp(40px,8vw,90px);font-weight:900;letter-spacing:-.03em;
+  color:rgba(0,150,214,.04);white-space:nowrap;user-select:none;
+  text-transform:uppercase;
+}
+.watermark-sub{
+  font-size:clamp(14px,3vw,32px);font-weight:700;
+  color:rgba(0,150,214,.03);text-align:center;margin-top:-8px;
+  user-select:none;letter-spacing:.2em;text-transform:uppercase;
+}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:1;}
+.orb{position:absolute;border-radius:50%;filter:blur(140px);pointer-events:none;}
+.hero-top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:28px 56px;z-index:3;}
+.logo-act{font-size:20px;font-weight:900;letter-spacing:-.03em;}
+.logo-act .b{color:var(--blue);}.logo-act .w{color:#fff;}
+.logo-r{font-size:9.5px;color:var(--w30);font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.hero-body{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:110px 56px 0;}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;max-width:1100px;margin:0 auto;width:100%;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:20px;}
+.eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);animation:pu 2s infinite;}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.25}}
+.eyebrow-line{width:22px;height:1.5px;background:var(--blue);}
+.hero-h1{font-size:clamp(40px,6vw,72px);font-weight:900;line-height:.93;letter-spacing:-.05em;margin-bottom:18px;}
+.hero-h1 .l1{display:block;color:rgba(255,255,255,.88);}
+.hero-h1 .l2{display:block;color:var(--blue);}
+.hero-h1 .l3{display:block;color:rgba(255,255,255,.12);}
+.hero-desc{font-size:13.5px;color:var(--w40);line-height:1.7;max-width:460px;margin-bottom:24px;}
+.hero-right{display:flex;flex-direction:column;gap:12px;align-items:flex-end;}
+.progress-card{background:linear-gradient(135deg,rgba(0,150,214,.15),rgba(0,150,214,.06));border:1px solid rgba(0,150,214,.28);border-radius:var(--r2);padding:20px 24px;min-width:180px;}
+.pc-lbl{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+.pc-bar{height:6px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;margin-bottom:8px;}
+.pc-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:100px;transition:width .6s;}
+.pc-nums{display:flex;justify-content:space-between;font-size:11px;}
+.pc-filled{color:var(--green);font-weight:700;}
+.pc-total{color:var(--w30);}
+.wm-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(0,150,214,.08);border:1px solid rgba(0,150,214,.2);color:rgba(0,150,214,.7);font-size:10px;font-weight:700;padding:8px 14px;border-radius:100px;letter-spacing:.05em;}
+.hero-kpis{max-width:1100px;margin:36px auto 0;width:100%;display:grid;grid-template-columns:repeat(5,1fr);background:var(--w05);border:1px solid var(--w08);border-radius:var(--r2);overflow:hidden;}
+.hkpi{padding:18px 0;text-align:center;border-right:1px solid var(--w08);display:flex;align-items:center;justify-content:center;gap:10px;}
+.hkpi:last-child{border-right:none;}
+.hkpi-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.hkpi-n{font-size:26px;font-weight:900;line-height:1;margin-bottom:2px;}
+.hkpi-l{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--w30);font-weight:700;}
+.hero-footer{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:24px 56px 44px;width:100%;}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,15,28,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--w08);z-index:10;}
+.nav-in{max-width:1100px;margin:0 auto;padding:0 56px;display:flex;overflow-x:auto;}
+.ntab{display:flex;align-items:center;gap:8px;padding:15px 18px;font-size:12px;font-weight:700;color:var(--w30);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.ntab:hover{color:var(--w50);}.ntab.on{color:#fff;border-bottom-color:var(--blue);}
+.ndot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.nn{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:100px;background:var(--w08);color:var(--w30);}
+.ntab.on .nn{background:var(--blue);color:#fff;}
+.gsec{display:none;position:relative;z-index:1;}.gsec.on{display:block;}
+
+/* PAGE */
+.page{max-width:1100px;margin:0 auto;padding:48px 56px 80px;}
+
+/* BANNER */
+.gbanner{border-radius:var(--r3);overflow:hidden;margin-bottom:40px;}
+.gb-body{padding:32px 40px 0;}
+.gtag{display:inline-flex;align-items:center;gap:7px;font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:12px;}
+.gname{font-size:32px;font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:6px;}
+.gdesc{font-size:12.5px;line-height:1.65;color:var(--w40);margin-bottom:16px;max-width:600px;}
+.proj-pills{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:20px;}
+.proj-pill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px;background:var(--w05);color:var(--w30);border:1px solid var(--w08);}
+.gstats{display:flex;border-top:1px solid var(--w08);}
+.gs{flex:1;padding:14px 20px;text-align:center;border-right:1px solid var(--w08);}
+.gs:last-child{border-right:none;}
+.gs-n{font-size:20px;font-weight:900;display:block;line-height:1;margin-bottom:3px;}
+.gs-l{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--w30);font-weight:700;}
+
+/* SECTION TITLE */
+.section-title{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--w20);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--w05);}
+
+/* FILLED CARDS */
+.mems{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-bottom:32px;}
+.fc{border-radius:var(--r2);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--w08);transition:transform .2s,box-shadow .2s;background:rgba(255,255,255,.02);}
+.fc:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,.5);border-color:var(--w12);}
+.fc-stripe{height:2.5px;}
+.fc-head{display:flex;align-items:flex-start;gap:12px;padding:16px 18px 12px;}
+.fc-av{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
+.fc-info{flex:1;min-width:0;}
+.fc-name{font-size:13.5px;font-weight:800;color:#fff;margin-bottom:2px;line-height:1.25;}
+.fc-skill{font-size:10.5px;font-weight:700;margin-bottom:7px;}
+.fc-badges{display:flex;flex-wrap:wrap;gap:4px;}
+.mb{font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;}
+.mb-act{background:rgba(46,196,160,.12);color:#2EC4A0;border:1px solid rgba(46,196,160,.25);}
+.mb-mkt{background:rgba(0,150,214,.12);color:#0096D6;border:1px solid rgba(0,150,214,.22);}
+.mb-nv{border:1px solid;}
+.fc-qr{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.fc-qr img{width:48px;height:48px;border-radius:7px;background:#fff;display:block;object-fit:cover;border:1.5px solid rgba(255,255,255,.1);}
+.fc-qr-lbl{font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--w20);}
+.qr-ph{width:48px;height:48px;border-radius:7px;border:1px dashed var(--w08);display:flex;align-items:center;justify-content:center;color:var(--w20);font-size:9px;}
+.fc-meta{display:flex;align-items:center;gap:6px;padding:7px 18px;background:var(--w03);border-top:1px solid var(--w05);flex-wrap:wrap;}
+.fc-req{font-size:9px;font-weight:700;color:var(--blue);letter-spacing:.05em;}
+.fc-proj{font-size:9px;color:var(--w20);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fc-sq{font-size:8.5px;font-weight:700;padding:1px 7px;border-radius:100px;background:rgba(0,150,214,.12);color:var(--blue);border:1px solid rgba(0,150,214,.2);}
+.fc-bs{font-size:8.5px;font-weight:700;padding:1px 7px;border-radius:100px;background:rgba(139,111,201,.12);color:#8B6FC9;border:1px solid rgba(139,111,201,.2);}
+.fc-foot{display:flex;align-items:center;justify-content:space-between;padding:9px 18px;border-top:1px solid var(--w05);}
+.fc-rec{font-size:9.5px;color:var(--w30);}
+.fc-li{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#fff;background:#0A66C2;padding:5px 11px;border-radius:100px;text-decoration:none;}
+
+/* EMPTY ROWS */
+.empty-section{margin-top:8px;}
+.es-title{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--w20);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.es-title::after{content:'';flex:1;height:1px;background:var(--w05);}
+.er{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-radius:10px;border:1px solid var(--w05);background:var(--w03);margin-bottom:6px;gap:12px;flex-wrap:wrap;transition:border-color .15s;}
+.er:hover{border-color:var(--w08);}
+.er-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+.er-dot{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.er-equiv{font-size:12px;font-weight:700;color:var(--w50);margin-bottom:2px;}
+.er-req{font-size:9.5px;color:var(--w20);}
+.er-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.er-nv{font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;}
+.er-sq{font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(0,150,214,.1);color:var(--blue);border:1px solid rgba(0,150,214,.2);}
+.er-bs{font-size:9px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(139,111,201,.1);color:#8B6FC9;border:1px solid rgba(139,111,201,.2);}
+.er-status{font-size:9px;font-weight:600;color:var(--orange);background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);padding:2px 8px;border-radius:100px;}
+
+/* CTA */
+.cta{background:var(--navy2);border-top:1px solid var(--w08);padding:64px 56px;position:relative;z-index:1;}
+.cta-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;}
+.cta-h{font-size:36px;font-weight:900;line-height:1.06;letter-spacing:-.03em;margin-bottom:12px;}
+.cta-h em{font-style:normal;color:var(--blue);}
+.cta-s{font-size:13px;color:var(--w30);line-height:1.75;max-width:480px;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;padding:14px 26px;border-radius:100px;text-decoration:none;border:none;cursor:pointer;transition:all .15s;}
+.btn-p{background:var(--blue);color:#fff;}.btn-p:hover{background:#007AB8;transform:scale(1.02);}
+
+@media(max-width:820px){
+  .hero-body,.page,.nav-in,.cta,.hero-top,.hero-footer{padding-left:20px;padding-right:20px;}
+  .hero-grid{grid-template-columns:1fr;}.hero-right{align-items:flex-start;}
+  .mems{grid-template-columns:1fr;}.hero-kpis{grid-template-columns:repeat(3,1fr);}
+  .cta-in{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- WATERMARK -->
+<div class="watermark">
+  <div>
+    <div class="watermark-text">ACT Digital</div>
+    <div class="watermark-sub">Em Processo · by actdigital</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="orb" style="width:700px;height:700px;background:#0096D6;top:-220px;right:-100px;opacity:.10;"></div>
+  <div class="orb" style="width:450px;height:450px;background:#F97316;bottom:-80px;left:5%;opacity:.07;"></div>
+  <div class="orb" style="width:300px;height:300px;background:#8B6FC9;top:40%;right:25%;opacity:.06;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--navy) 30%,transparent 100%);z-index:1;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,var(--navy) 8%,transparent 50%);z-index:1;"></div>
+
+  <div class="hero-top">
+    <div class="logo-act"><span class="b">act</span><span class="w">digital</span></div>
+    <div class="logo-r">Banco Inter · Squad · Vagas por Gestor · 2025</div>
+  </div>
+
+  <div class="hero-body">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><div class="eyebrow-dot"></div>Banco Inter · Squad & Bodyshop<div class="eyebrow-line"></div></div>
+        <h1 class="hero-h1">
+          <span class="l1">Vagas Inter</span>
+          <span class="l2">por Gestor</span>
+          <span class="l3">Em Processo · ACT Digital</span>
+        </h1>
+        <p class="hero-desc">35 posições abertas em 5 gestores — Java, Python, QA, .NET, Salesforce, Adobe AEM e Marketing Cloud. Candidatos identificados e vagas em seleção.</p>
+      </div>
+      <div class="hero-right">
+        <div class="progress-card">
+          <div class="pc-lbl">Progresso Geral</div>
+          <div class="pc-bar"><div class="pc-fill" style="width:42%"></div></div>
+          <div class="pc-nums">
+            <span class="pc-filled">✅ 15 preenchidas</span>
+            <span class="pc-total">35 total</span>
+          </div>
+        </div>
+        <div class="wm-badge">🔒 Em Processo · by actdigital</div>
+      </div>
+    </div>
+    <div class="hero-kpis">
+      <div class="hkpi"><div class="hkpi-icon" style="background:rgba(0,150,214,.13)">📋</div><div><div class="hkpi-n" style="color:var(--blue)">35</div><div class="hkpi-l">Total Vagas</div></div></div>
+      <div class="hkpi"><div class="hkpi-icon" style="background:rgba(46,196,160,.12)">✅</div><div><div class="hkpi-n" style="color:#2EC4A0">15</div><div class="hkpi-l">Preenchidas</div></div></div>
+      <div class="hkpi"><div class="hkpi-icon" style="background:rgba(249,115,22,.12)">🔍</div><div><div class="hkpi-n" style="color:var(--orange)">20</div><div class="hkpi-l">Em Seleção</div></div></div>
+      <div class="hkpi"><div class="hkpi-icon" style="background:rgba(139,111,201,.13)">👤</div><div><div class="hkpi-n" style="color:#8B6FC9">5</div><div class="hkpi-l">Gestores</div></div></div>
+      <div class="hkpi"><div class="hkpi-icon" style="background:rgba(212,230,0,.1)">⚡</div><div><div class="hkpi-n" style="color:var(--yellow)">42%</div><div class="hkpi-l">Cobertura</div></div></div>
+    </div>
+  </div>
+  <div class="hero-footer"></div>
+</div>
+
+<nav class="nav">
+  <div class="nav-in">
+    <button class="ntab on" onclick="go('fg',this)"><span class="ndot" style="background:#0096D6"></span>Felipe Gonçalves<span class="nn">4</span></button>
+<button class="ntab" onclick="go('rm',this)"><span class="ndot" style="background:#F97316"></span>Renan Miranda<span class="nn">20</span></button>
+<button class="ntab" onclick="go('rs',this)"><span class="ndot" style="background:#8B6FC9"></span>Rodrigo Silva<span class="nn">2</span></button>
+<button class="ntab" onclick="go('sb',this)"><span class="ndot" style="background:#2EC4A0"></span>Samuel Barboza<span class="nn">2</span></button>
+<button class="ntab" onclick="go('tr',this)"><span class="ndot" style="background:#D4E600"></span>Tiago Rentes<span class="nn">7</span></button>
+  </div>
+</nav>
+
+
+<div class="gsec on" id="gsec-fg">
+  <div class="page">
+    <!-- BANNER -->
+    <div class="gbanner" style="background:linear-gradient(135deg,#0096D620 0%,#0096D608 100%);border:1px solid #0096D633;">
+      <div class="gb-body">
+        <div class="gtag" style="background:#0096D618;color:#0096D6;border:1px solid #0096D640">🎯 Gestor · Felipe Gonçalves</div>
+        <div class="gname">Felipe Gonçalves</div>
+        <div class="gdesc">Projeto Hiperpersonalização Fase II — visão cliente</div>
+        <div class="proj-pills"><span class="proj-pill">Hiperpersonalização Fase II — visão cliente</span></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n" style="color:#0096D6">4</span><span class="gs-l">Total Vagas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">2</span><span class="gs-l">Preenchidas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316">2</span><span class="gs-l">Em Seleção</span></div>
+        <div class="gs"><span class="gs-n" style="color:#0096D6" title="felipe.goncalves@inter.co">📧</span><span class="gs-l">Fernanda</span></div>
+      </div>
+    </div>
+
+    <!-- FILLED CARDS -->
+    <div class="section-title">✅ Candidatos Identificados</div>
+    <div class="mems"><div class="fc">
+  <div class="fc-stripe" style="background:#ff0000"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#ff000022;color:#ff0000;border:1px solid #ff000044">LM</div>
+    <div class="fc-info">
+      <div class="fc-name">Luis Mareze</div>
+      <div class="fc-skill" style="color:#ff0000">Adobe AEM</div>
+      <div class="fc-badges">
+        <span class="mb mb-mkt">Mercado</span>
+        <span class="mb mb-nv" style="background:#D4E60022;color:#D4E600;border-color:#D4E60044">Especialista</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAAClCAIAAACySaqNAAADjElEQVR4nO3dPY7bMBCG4WyQJl0ukPsfbC+QLqVTLkAg40zmh16879NalmR/GGBAitTb4/H4Ioyvt29Aq8ybxbxZzJvFvFnMm8W8WcybxbxZvsUff//xc+c+fv96Hzrz8ROOC6U+jcU/4UX+SeubxbxZzJvFvFme9GuHxq6q0r/ETVajSnMX39Wtf9L6ZjFvFvNmMW+WXL92aBx+SkmdqtI3NTZosbV/0vpmMW8W82Yxb5ZSv7amMhiXmuI8Dq5Mj74m65vFvFnMm8W8WT5Hv9Y4Cha7NWK4xvpmMW8W82Yxb5ZSv7a2SCC+bmV6NDWneRycusnUXc2xvlnMm8W8WcybJdev3ZoQbHzuf27NwNxAXiPrm8W8WcybxbxZ3j7FfrlzT/bPPaH2mrOl1jeLebOYN4t5szzp1yrThZUH/SvXjc2t4pwbyGtkfbOYN4t5s5g3S258rbEjq5z51ua6lVMdKv9G5WDrm8W8WcybxbxZSv1a7NZ+/7dG0FJujRha3yzmzWLeLObNknsf1VzD0jgatTbxemt2uML6ZjFvFvNmMW+WzvUGt97FObc+NL6rtfG1xt7W+mYxbxbzZjFvls750FtPe82dqnKh+LquN9AG82YxbxbzZsmtDz285uDUoXGmNf7urdeJHhxf0wfzZjFvFvNm6Vwf2njw4dZ3U+ZG7hobQ+ubxbxZzJvFvFlK76OKG4fGbi7WeKG5beBSZ56bHrW+WcybxbxZzJultN5g7rH4isbHyuKD127D/df0n8ybxbxZzJul8/0GsbVZy1tb0a497Ob6UP0r82YxbxbzZnkyHzo3p1mZH4wblrlWqNGtt4ta3yzmzWLeLObNUtovN/Xd1JkbO8HGT9c6wbmVp9Y3i3mzmDeLebN07pfbaG2jt7UFBo13FXM+VB/Mm8W8WcybpbT/WqPG7qbi1ivr556qO1jfLObNYt4s5s2S289jrTO6tU/v2vN6sbmlC9Y3i3mzmDeLebN07r8Wa1yNMHfwrf08UheqnNn6ZjFvFvNmMW+WUr82J9WSrL3aKr5u42zpXCNsfbOYN4t5s5g3y4v2a2vvRoitvYShcirnQ/VX5s1i3izmzVLq19Y2EWt82C313ZTGQTHXG6iHebOYN4t5s+T6tbXloo1rLWO3vrv2Tx6sbxbzZjFvFvNmedH91zTE+mYxbxbzZjFvFvNmMW8W82YxbxbzZvkDKxpRNzTxOAQAAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-12587</span>
+    <span class="fc-proj">Hiperpersonalização Fase II — visão cliente</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Joice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/luismareze/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#FF6B6B"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#FF6B6B22;color:#FF6B6B;border:1px solid #FF6B6B44">CP</div>
+    <div class="fc-info">
+      <div class="fc-name">Clécio Lucio Tavares de Pontes</div>
+      <div class="fc-skill" style="color:#FF6B6B">QA</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXElEQVR4nO3dMZIUMQwFUKBIyLgA9z8YFyAjXPIOzFdZcnur3ktnp6eX/aUSHrf89ePj4wsEvr19A3waskJKVkjJCilZISUrpGSFlKyQkhVS39cv//j568x9/P3zO//hx13tvLd0G6X3lv7pdj630fo21BVSskJKVkjJCqn/9LYPpS5yrdSvrZvZnXa1ZOdSO51v4208lG5DXSElK6RkhZSskKr1tg+NS5ONn7vzQY0rpI2/79qxv4K6QkpWSMkKKVkhtdXbvqXx2//GNnl9qZ19FJdQV0jJCilZISUrpD5lb7t2yQaGUqs7dxuN1BVSskJKVkjJCqmt3nauBWvcG7DT6pbeW3p1/UElxxphdYWUrJCSFVKyQqrW2x57YP+hsam889WSt/4K6gopWSElK6RkhdTXT3F2w51tY+Nuh0+xG1ddISUrpGSFlKyQqs233WnQjg2HbdzKOvf7rh3r5UvUFVKyQkpWSMkKqc5nyeaa2cYjFUrWXeSdU752LuXsBnrICilZISUrpDr32647o53dqZdMFTg2SbbUy88tHz+oK6RkhZSskJIVUv/Zbzs3/nVuV2zjvIJjl3o4dopwibpCSlZIyQopWSG19SzZsV0Hpdto3MAwd0zZ3NCvxgb8QV0hJSukZIWUrJDa2pNw7Lms0g/PzSs4duXGIbzrHy5RV0jJCilZISUrpGq97dw0g7kRWY1DBuZWhHea2bXG5XJ1hZSskJIVUrJCqrYn4djDVHNrkce2sr51atnc/xLUFVKyQkpWSMkKqdp824fGPnFH41SB0gc1rp+W7mpukXdNXSElK6RkhZSskBp8luyhcajCJc+w7dhpsd862UFdISUrpGSFlKyQOnfm7p3jxOauPNe9Nt6GOQmMkBVSskJKVkhtnUs2t4A4t4GhdNTYsdNt556sa5w9pq6QkhVSskJKVkh1nt1wbM7sWwNeG4fSHnsqr5G6QkpWSMkKKVkh1bkn4c4Hz+ZWk++88tyIXnWFlKyQkhVSskJqa9324a2F2kZvHdBbuqsd9ttygqyQkhVSskJqcL7tw1t94rE5s8d2Hbz1lJq6QkpWSMkKKVkhVZtv2/hg0s4DUTuXavyN5k7kLTk25ExdISUrpGSFlKyQOjcDrGRnsfXYsLG5Q3aPHZ5Woq6QkhVSskJKVkh17rfdcclRuI2Obd2d2yjyoK6QkhVSskJKVkjV5tvOnZJQerXx+/23msqSnYOBG6krpGSFlKyQkhVSnWc3rO00aMcGBex03GvHBunOjfdVV0jJCilZISUrpLZ62znHvmdvHIxQeu+xvbqlc9jW1BVSskJKVkjJCqlLe9ud1dXSlR+O7eQtdb5zx15Yt2WErJCSFVKyQmqrt73kLNi5KQrrnvqSh9Z2rmzdlhGyQkpWSMkKqVpve+zpqbm5VnMNaWMTXXLswDd1hZSskJIVUrJC6tL5tlxIXSElK6RkhZSskJIVUrJCSlZIyQopWSH1D+Sz8P2d2thqAAAAAElFTkSuQmCC" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-13379</span>
+    <span class="fc-proj">Hiperpersonalização Fase II — visão cliente</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Greice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/cl%C3%A9ciolucio-pontes-234641225/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div></div>
+
+    <!-- EMPTY ROWS -->
+    <div class="empty-section"><div class="es-title">🔍 Vagas em Seleção — 2 posições</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Especialista</div>
+      <div class="er-req">COUPA-12587 · Hiperpersonalização Fase II — visão cliente</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#D4E60015;color:#D4E600;border:1px solid #D4E60033">Especialista</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#7B5EA722;border:1px solid #7B5EA744">
+      <span style="color:#7B5EA7;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Personalization Sênior</div>
+      <div class="er-req">COUPA-12587 · Hiperpersonalização Fase II — visão cliente</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div></div>
+  </div>
+</div>
+
+<div class="gsec" id="gsec-rm">
+  <div class="page">
+    <!-- BANNER -->
+    <div class="gbanner" style="background:linear-gradient(135deg,#F9731620 0%,#F9731608 100%);border:1px solid #F9731633;">
+      <div class="gb-body">
+        <div class="gtag" style="background:#F9731618;color:#F97316;border:1px solid #F9731640">🤖 Gestor · Renan Miranda</div>
+        <div class="gname">Renan Miranda</div>
+        <div class="gdesc">Babi GenAI + Melhorias URA — Hiperpersonalização e GenAI</div>
+        <div class="proj-pills"><span class="proj-pill">Babi GenAI</span><span class="proj-pill">Melhorias URA — Hiperpersonalização e GenAI</span><span class="proj-pill">Abertura de Conta via WhatsApp</span></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n" style="color:#F97316">20</span><span class="gs-l">Total Vagas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">9</span><span class="gs-l">Preenchidas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316">11</span><span class="gs-l">Em Seleção</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316" title="renan.miranda@inter.co">📧</span><span class="gs-l">Eduarda · Rapha · Joice</span></div>
+      </div>
+    </div>
+
+    <!-- FILLED CARDS -->
+    <div class="section-title">✅ Candidatos Identificados</div>
+    <div class="mems"><div class="fc">
+  <div class="fc-stripe" style="background:#F97316"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#F9731622;color:#F97316;border:1px solid #F9731644">CO</div>
+    <div class="fc-info">
+      <div class="fc-name">Camila Paulino Otvos</div>
+      <div class="fc-skill" style="color:#F97316">Dados</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#8B6FC922;color:#8B6FC9;border-color:#8B6FC944">Pleno</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEaElEQVR4nO3dO44cORAFQElYR54uoPsfTBdYT+asT4PzCGZm1WAj3K5fTz8kEhwW+f3j4+MbBH48/QB8GbJCSlZIyQopWSElK6RkhZSskJIVUv/sP/756/fMc/z998/mvsuni6OD9/aXuvlrFH7BPvvHUFdIyQopWSElK6Q+6W0XN23j4qhfuzl4rGvu64sXT/0K6gopWSElK6RkhdRZb7s46oyOOrKjg2+ayv2nN33xXuGV+36FhbpCSlZIyQopWSF11dv2KRx77ZvP8NS5T1FXSMkKKVkhJSukXtrb9g2YHt3o6NzFUyPCfdQVUrJCSlZIyQqpq952rAUrnOja18zuD+57H2zsV1BXSMkKKVkhJSukznrbsRf2C9vVl3xaaOxXWKgrpGSFlKyQkhVS39+5d8PRP/T7bnSkb3D5JdQVUrJCSlZIyQqps/Vtj/7PXvjf/8IO9Cs2s2NLkVnflhqyQkpWSMkKqcZ3yW4635c0hntPDbY+tequukJKVkjJCilZIVU5J6Fw266++77ktbT9U/W9/2bclgmyQkpWSMkKqcY9d/t2mV3OHdtkt2+dhL6/89G5e+oKKVkhJSukZIVU5Z67fSu69r081teAj7l5jKPvq66QkhVSskJKVkh90tuOjb0WDmsWboV7dPDRlOHF2ADx/tw9dYWUrJCSFVKyQupqvu1T6yT09Yn7S90Ye+Pr6L5H1BVSskJKVkjJCqlPetu+PvGpXm9vbPLD0bmLm0vdfEF1hZSskJIVUrJC6mzcdmw6al/7Vthy9k0GGBsQP6KukJIVUrJCSlZINa6TsHfToN28D3azJtbYqO7Y6mL7gxfqCilZISUrpGSFVOV828Jh3MJhzb5zbxalLZyisChsZhfqCilZISUrpGSF1NWeu/uD9266yMJz94sbjBnrXm8Wc1BXSMkKKVkhJSukKvclW9zMTv2Kw5qLvh15n1pUQV0hJSukZIWUrJCa25fs6NO+vrhwYu/RwWNLoO0vtTh6KnWFlKyQkhVSskLqpfNtF2O7h/UtNjZ25T3vkjFBVkjJCilZIXW25+7R7mGFk2SfmgY79rZY4X33l7IGGBNkhZSskJIVUo17N7xkXsHYvmR9w9Y37EvGA2SFlKyQkhVSn4zbFg4+Hn161FMXLpW7v/LRuTeX6nuV7oa6QkpWSMkKKVkh9djeDYvC96MWhTMljhT+6W46/ULqCilZISUrpGSF1Nl8276FrAoPXvQt+jU2KXhsRbQ9dYWUrJCSFVKyQuqst130tVF9r2ntvWSP4bFe/oi6QkpWSMkKKVkhddXb9ilckaBwwbCnliLbX2psXrO6QkpWSMkKKVkh9dLettBTq+7eGJura04CLWSFlKyQkhVSV71t39yAsR1qjzrfsUUV9lfeP1XhssILdYWUrJCSFVKyQqpy74ZCYxNs9/fdK9yN4qZ77dtQY6GukJIVUrJCSlZIXe25y/+KukJKVkjJCilZISUrpGSFlKyQkhVSskLqP1b3/K992DqdAAAAAElFTkSuQmCC" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14288</span>
+    <span class="fc-proj">Babi GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Eduarda</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/camila-paulino-otvos/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#f89820"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#f8982022;color:#f89820;border:1px solid #f8982044">FA</div>
+    <div class="fc-info">
+      <div class="fc-name">Francisco José de Magalhães Araújo</div>
+      <div class="fc-skill" style="color:#f89820">Java</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAAClCAIAAACySaqNAAADk0lEQVR4nO3dTY4TMRCGYQaxYccFuP/BuAA7lmE5kqU4KerHRu/7bNPT6cmnkkp22/54PB5fhPH19ANolHmzmDeLebOYN4t5s5g3i3mzmDfLt/3H33/8nHmOP79/vf+9y8V7ff/CJY+x2D+V9c1i3izmzWLeLC/6tUWoQ9kLdWShZid08f4/Wm61f6rQjzP2Sy6sbxbzZjFvFvNmifVri8LOqFCoBevrBEPGfknrm8W8WcybxbxZUv1an7E2KjRklhlQu4T1zWLeLObNYt4sl/ZrIaEBtcJP/0fWN4t5s5g3i3mzpPq1UwNMhQNqfY9x6nW2PeubxbxZzJvFvFli/dqp8abCWcuxT/dO/ZLWN4t5s5g3i3mzfNy5X27f+/d961L3t7qE9c1i3izmzWLeLLH91zKdUWErlPnevo4ss/I09EWLUEbWN4t5s5g3i3mzzO3nEWorQr1eaM1AZnFCSGFjWPhU1jeLebOYN4t5s1SuN8hMNRa2UZlGKfMY+7+95AAH65vFvFnMm8W8WV68v1bYKPV1ZPtbjc3DhhS2uvuLF9Y3i3mzmDeLebOkzqPKNA6Fb8aFvjd0cWHLGRp9Cwn9rfXNYt4s5s1i3iyx9aGXLD/oG5wKuXP1heNr+mTeLObNYt4ssfWhoU9Ddy7c/aKvE+wbXwvJ/IPWN4t5s5g3i3mzxN5f6zttMzP8VDjOtb947HtDt1o4vqZP5s1i3izmzfJifG1syu+SKc69wuausH3z/TU9Zd4s5s1i3iyp9aGX9C+X7LC217cx7/7ihfXNYt4s5s1i3ixz51GNbUU7tv9a39HxffPO1jeLebOYN4t5s6T6tb7jNfumOO/cTTfE8TW9y7xZzJvFvFkq50PH5iVPLRI4xfND9Y/Mm8W8WcybZW4+NOSSRiljbPWo/ZqeMm8W82Yxb5bU/muF+rYn2xsbE7xkKzfrm8W8WcybxbxZUudRZfSdZVW4/ODUYtK+ttH6ZjFvFvNmMW+WWL+2KHxZP3PnsVuFWr++wTjPN9C7zJvFvFnMmyXVr/UZ2z92aXb6Ru769ssNsb5ZzJvFvFnMm+XSfm1xqrvZ6ztDq++1QeubxbxZzJvFvFlS/dpY31R42mZobvHUaoRF4flb1jeLebOYN4t5s8T6tbHlon0LJE+dTNr3rp/nh+op82YxbxbzZrl0/zU1sb5ZzJvFvFnMm8W8WcybxbxZzJvFvFn+AjBl+zwZi75FAAAAAElFTkSuQmCC" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14286</span>
+    <span class="fc-proj">Babi GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Fernanda</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/fjmagalhaes/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#f89820"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#f8982022;color:#f89820;border:1px solid #f8982044">FJ</div>
+    <div class="fc-info">
+      <div class="fc-name">Felipe Shai Santos de Jesus</div>
+      <div class="fc-skill" style="color:#f89820">Java</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#8B6FC922;color:#8B6FC9;border-color:#8B6FC944">Pleno</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAAClCAIAAACySaqNAAADoklEQVR4nO3dTY7UMBCGYQaxYccFuP/BuAA7ls1yJEtdTVE/Set9n20yTno+WSrZsf3xeDy+COPr1S+gVebNYt4s5s1i3izmzWLeLObNYt4s3+LL33/83HmPP79//fdrHH973BxfTTUVq/yERvFr2L9ZzJvFvFnMm+VFvXaIa4GUuH5JVVXx1bXyLX5Q3HJFqhK0f7OYN4t5s5g3S65eOzQOP8U3Hw9qfG6quKuMvsXm/pMH+zeLebOYN4t5s5TqtTWVQbFDqiKL/zb13Juwf7OYN4t5s5g3y03rtblpyvjq3AjaTdi/WcybxbxZzJulVK/NjSittVyZaW20NjZn/2YxbxbzZjFvlly9tlbOpIa93uLq4arC0P7NYt4s5s1i3iwfb7Ff7tys5do+Ijdh/2YxbxbzZjFvltz+a1eNRqWsfYM2tz60smQiZv9mMW8W82Yxb5bL1htUqqq5nc4aq8jU2FzjtiLul6tP5s1i3izmzTL4/VrjzrSNC0Ibt2NrfG7qNSrs3yzmzWLeLObNUvp+ba0Ei1tOvVWjtV3hKjcf7N8s5s1i3izmzZKr1xo/WIs1VmQ3OV00burQ+JIH+zeLebOYN4t5s7yo1ypDOVdNJlY0/t6UxnlY6zV9Mm8W82Yxb5a99QZXDYrFLadUzrKKm6q8Ror9m8W8WcybxbxZXtRrc5twzH2D1jgIWDnLKja3f0nM/s1i3izmzWLeLLn911I3N567PrdvbeOyzbUa8+B8qJ4ybxbzZjFvls71BhU3aXnt+7WrzlWwf7OYN4t5s5g3S+l8g9TNc5t/NF5dm/+tfArn92v6V+bNYt4s5s0yOL72FmNVcVM3Obe0sYq0f7OYN4t5s5g3S2k/j7kdYucWhDbuprvWciP7N4t5s5g3i3mz5NaHpq5WWj6sjXNdtWdc5YSt1HPt3yzmzWLeLObN0rk+tKKyl9natOzaKs65+tT+zWLeLObNYt4suf1y55ZtVm6eGyOLb26cHU6plG/2bxbzZjFvFvNmKZ1vMHewwFV7mTW2vLYaIcX+zWLeLObNYt4se+dRpTSuiGzcmDfWOFuauppi/2YxbxbzZjFvlpvWa3OzpbHKeVSp5zaedOV8qJ4ybxbzZjFvllK9tjbzOPdp2NyCirVv7tx/TU+ZN4t5s5g3S65eW1suOrcMYG4+NDZ3krznUekp82YxbxbzZsmdb6B3Z/9mMW8W82YxbxbzZjFvFvNmMW8W82b5C3sTWGN98LCkAAAAAElFTkSuQmCC" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14358</span>
+    <span class="fc-proj">Melhorias URA — Hiperpersonalização e GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/felipeshai/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#f89820"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#f8982022;color:#f89820;border:1px solid #f8982044">JS</div>
+    <div class="fc-info">
+      <div class="fc-name">Jonael Lemos Santos</div>
+      <div class="fc-skill" style="color:#f89820">Java</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#D4E60022;color:#D4E600;border-color:#D4E60044">Especialista</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAAClCAIAAACySaqNAAADhklEQVR4nO2dO27jQBAFbcPJZr6A73+wvcBmDrX5ABq50R8OUVWpKJFioYGHnt/74/F4EwwfVz+AjKJvFvpmoW8W+mahbxb6ZqFvFvpm8bn/+M/X98xz/Pz7e+BjhO575l9YsL5Z6JuFvlnom8WLvLawzwIhCqPQ/pcLI1jol/fPfNWbtL5Z6JuFvlnom0Usry30Za79jQrDTqgplgloe8bepPXNQt8s9M1C3yxSeW2MsaC0/FSmN3cm1jcLfbPQNwt9s7hHXhsbahzrc12F9c1C3yz0zULfLFJ5rS+wjA2Ahm60XLwPd6FnHot+1jcLfbPQNwt9s4jltUMGBDPTyvrWDIRezlVv0vpmoW8W+mahbxbvt9gvN9MFC6WqwglrZ46WWt8s9M1C3yz0zeJFXjskKI1NSVvo+wt9A757rG8W+mahbxb6ZvFiPDQTWEKfFlK4w9r+4hCFyTdzsfXNQt8s9M1C3ywq14eOddDGElnh1rsZClOk9c1C3yz0zULfLFLjoX3dqD1nDnEujE2jM6/JU/TNQt8s9M0iltcWxppiIfpWFIytRuiLydY3C32z0DcLfbOoXB86djr6Hdt8rjeQC9A3C32z0DeLVF7rm4N21QFU+4sXbrGmdcH6ZqFvFvpmoW8Wsbx2x47S2JqBwn/UtxeI9c1C3yz0zULfLBrPoyoMHX0X9913f6PQOfOFWN8s9M1C3yz0zSLVX8sMgI4FpT19U+HGepHuvyZP0TcLfbPQN4sX/bWxBtP+4tBTZUJl35GgfX8/hPXNQt8s9M1C3yxi5xssZOLMPr+c2Ywr5KrTRa1vFvpmoW8W+mZR2V/rGy7MrBk45NDPQ5ZqWN8s9M1C3yz0zSLVX8sEh6tGPDMcMtnN/XLlt+ibhb5Z6JtFrL/Wx36BZGEzLvQYoVWcoTZf31Ptsb5Z6JuFvlnom0VsP4++Lcb2n151PFXfSoY9ffnU+mahbxb6ZqFvFqn91/qOBM2MPIZGWvtiY98ZBRmsbxb6ZqFvFvpmkcprfRQeStA32a1wEWsoRS44HipP0TcLfbPQN4tD89oh54fuvxuiMCdmXo71zULfLPTNQt8sGs+j6iMzy6xv84/CpljhfnML1jcLfbPQNwt9s4jltbHlon0jnoXhru8whD6sbxb6ZqFvFvpmETs/VO6O9c1C3yz0zULfLPTNQt8s9M1C3yz0zeI/5ZZI8TGXrLgAAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14201</span>
+    <span class="fc-proj">Melhorias URA — Hiperpersonalização e GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Greice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/jonaellemosdev" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#3776ab"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#3776ab22;color:#3776ab;border:1px solid #3776ab44">AB</div>
+    <div class="fc-info">
+      <div class="fc-name">Allan Guilherme Goncharenco Batista</div>
+      <div class="fc-skill" style="color:#3776ab">Python</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEY0lEQVR4nO3dMXLbMBAF0DiTJl0ukPsfLBdIl9LpUqCAPoJdgJp5r5VM0vIfzBpaLj8+Pz+/QODr7QvgbcgKKVkhJSukZIWUrJCSFVKyQkpWSH2bv/z9x88z1/Hn96//vozhZ5fePD/R0pELTzR/c5/5ZVhXSMkKKVkhJSukXtS2g3nts6SwTuw779zSVS1VzfMj3/o0rCukZIWUrJCSFVJrte2grz4t3D+dX8ZOUXmrTB4c+y/BukJKVkjJCilZIbVV2x6zVIEuHWrp1SWFXRYPYV0hJSukZIWUrJB6j9p2bufr/p2qubDifmYxO7CukJIVUrJCSlZIbdW2tyqyvkaCne/3l7ZiCz+6Y38F6wopWSElK6RkhdRabXvshv3BTn26U/kWzkko3D6+9VewrpCSFVKyQkpWSH0889kNx9pRC3sSCj2zRcG6QkpWSMkKKVkhtTbf9tiggJ0TFV7V/Nc/NvnhIQMZrCukZIWUrJCSFVKVPQl9u43HpsHuVKCFzQ9LCv8P8OwGasgKKVkhJSukzs1JKBxKW7h9vLNh2vcstWM9wks1tXWFlKyQkhVSskJqrd/2IROzdk5U+GqhW89usG9LC1khJSukZIVU471khc/LOrY1OT/vksJZB33jGuZvHlhXSMkKKVkhJSukKu8lW6oi+4rZ+aF29A3u2vk0lk60w7pCSlZIyQopWSFV+eyGvlqv781zfTvCb9EyPLCukJIVUrJCSlZIvehJOPb197Hd1aU3H+sreEjXwZx1hZSskJIVUrJCaq22fUj1OldY6xXe/1bYutu3Ma3flhqyQkpWSMkKqcoZYIXduH0/e+wmrsJD3WrJGFhXSMkKKVkhJSuktmaAzfXd8nRrsOytcQ3zy5ifSL8tF8gKKVkhJSukGufbPuQL/bm+x4U9pBt36bxz1hVSskJKVkjJCqnGGWC37hbra41YcuxEhZcxZ10hJSukZIWUrJDampNw7Nli8/Pemj02/9m+895qybCukJIVUrJCSlZIVc5JuFUYzg91a++1sJ+h73Y4PQm0kBVSskJKVkhde3bDoHC38VZT8PzIg2OTHwp/QesKKVkhJSukZIXUVm177Fmwt4q7pfp059fvGwm2dCg9CdSQFVKyQkpWSL2obefFzlIZ9ZB7qwZ9Y2d3TlT4Wdm35QJZISUrpGSF1NqchD47e6C36tPCIy8dqq+Td866QkpWSMkKKVkhtdaTcKwddWdbs++WtrnCroNBXx/FEusKKVkhJSukZIVUZb/tXN/AsJ3z9nWn7hz52Czg+ZsH1hVSskJKVkjJCqmt2vaWwmff3rrDbemq+m7SW2JdISUrpGSFlKyQesvadlDYwDA/8rFBEEuv9t2lNrCukJIVUrJCSlZIVc63LXRrzmzfuNv5eXeYk8DjyAopWSElK6S2nrlbqO9hYoXzbfvuNBscGxhmTgItZIWUrJCSFVIvalv4x7pCSlZIyQopWSElK6RkhZSskJIVUrJC6i8T4ty3+c+YkAAAAABJRU5ErkJggg==" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14201</span>
+    <span class="fc-proj">Melhorias URA — Hiperpersonalização e GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/allan-goncharenco-115567121/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#3776ab"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#3776ab22;color:#3776ab;border:1px solid #3776ab44">AD</div>
+    <div class="fc-info">
+      <div class="fc-name">Alexandre Jorge Macedo Dantas</div>
+      <div class="fc-skill" style="color:#3776ab">Python/Dados</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEaklEQVR4nO3dPY4jNxAG0N2FE2e+gO9/sL3AZg7lnAHnI6r4M8B7qVrdLc0HooaqJn9+Pp8fEPh1+wb4NmSFlKyQkhVSskJKVkjJCilZISUrpP6av/z3P/+euY///vzOrzscPBjeOz946b1L30bjTd76KwyMK6RkhZSskJIVUl/UtoOlOnFuX524dN3KJ1qqfBvr01t/BeMKKVkhJSukZIXUWm07aKxP5wdXLnRs0nPu2Fxz5TbmjCukZIWUrJCSFVKl2nafpd6Aeb1WKSr3TcU+UnEvMa6QkhVSskJKVkg9WttWitmlXt19k7yVluE3GVdIyQopWSElK6RKte2tAm2pbBwOrlSvlQfelqaAK/0b+xhXSMkKKVkhJSuk1mrbY7+kV3oSHnl1n1v9DMYVUrJCSlZIyQqpL2rbR346b1zcYH7mpVcbVVqGjzGukJIVUrJCSlZIra1vu+9H+aX37it1lzQ+8Fa5UOWuBta3pYeskJIVUrJCqvNZssbK9zsWhvvuqvLexk9kXCElK6RkhZSskCr121baUffNve4rSPetUTs/VeXgxm/DuEJKVkjJCilZIXWt37bxIa6lCw0a50DnKo29jY+02buBE2SFlKyQkhVSa/22c/s2PnhzrYNjH6HxNiqMK6RkhZSskJIVUj8/n09+9LHtXfdd6FbnwKBxc4rGnSzmjCukZIWUrJCSFVJr/bbHZkgfWVj2WK9u5TYadyCeM66QkhVSskJKVkh9MW97a72CpVMNbk3jVs68r/dj/t4lxhVSskJKVkjJCqnOdRKWDt5X+i1pLIT3PS32COMKKVkhJSukZIVUqSdhsO8Rr8bSr7FJdungYzOzlVPZu4EeskJKVkjJCqlST0JjG+yxWd19a4898qDdviXBjCukZIWUrJCSFVKl9W0rBdqxjXIbOwcqT20dWxFtfvD8uuZt6SErpGSFlKyQ6lwDrHEvg31tsMd2Otj3lNrSdZeobekhK6RkhZSskCrt3VD5Bf9YS+mtbRHeXKO28m0YV0jJCilZISUrpEo9Cft+Z5+f6tZOwPODB/s26F3S+D+EcYWUrJCSFVKyQqrUk/BI58Bg3/KvtxoYHpk+Nq6QkhVSskJKVkh17t3wLXYruNUMcGtrtcrHHxhXSMkKKVkhJSuk1uZtjznWhHCr66DxVPt6ogfGFVKyQkpWSMkKqdKzZI2ObXFWuW5F434TlYXZ7LnLCbJCSlZIyQqpzn3Jluyrmo/NY97qK5jbt4WEcYWUrJCSFVKyQmqtth3sK6OOTaceO/O+rRwaL+RZMnrICilZISUrpEq17T7zmutYO+r84Ll9m7Y1tihY35YtZIWUrJCSFVKP1raDR7ZjmGtsUXikzXlgXCElK6RkhZSskCrVtsf2ULh15qHGbNx4rTJfXLmrgZ4EtpAVUrJCSlZIra1vu88jmzXc2vq3sdRtfFhuYFwhJSukZIWUrJB6dH1bHmRcISUrpGSFlKyQkhVSskJKVkjJCilZIfU/g7fhqRgKn0cAAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14286</span>
+    <span class="fc-proj">Babi GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Raphaela</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/alexandre-dantas-05a4aa173/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#3776ab"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#3776ab22;color:#3776ab;border:1px solid #3776ab44">AA</div>
+    <div class="fc-info">
+      <div class="fc-name">Alexandre Eduardo Pereira de Azevedo</div>
+      <div class="fc-skill" style="color:#3776ab">Python/Dados</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAADNCAIAAACU3mM+AAAFKklEQVR4nO3dMXIsNRSGUR5FQsYG2P/C2AAZockn0CuVrr5uwzmpPd1tz18qqXUl/fj6+voFLvv16Qfgf0HOKMgZBTmjIGcU5IyCnFGQMwpyRuG39Y9//+PP5jn++fuvxX0/frq2/uz6L1rf6OSz9y51cqNB62fWnlGQMwpyRkHOKPxkHPDhqf7p4LBgy9Z9t250b2SzvvJT36D2jIKcUZAzCnJGYW8c8OFez/feY2xdanCWYnAMce/vXTv5BrVnFOSMgpxRkDMKR+OAe7aKee5d6qTEaNDgGOIp2jMKckZBzijIGYWXjgPWfdvB9/KDL+KzCY97N7pHe0ZBzijIGQU5o3A0DrjXIT258mCty1bH/+SXBwuQtmRDCu0ZBTmjIGcU5IzC3jggK0G5tzL2ZKbhZIRx8hcNDgueKiLSnlGQMwpyRkHOKPz4jueIDb6mX3vJBkFb3lk1pD2jIGcU5IyCnFHYOz/gnQtWX7I+YMu9IqKTr2xw/uOD9oyCnFGQMwpyRmFvPmCw9zp4o5d4anrgZNCwNviFas8oyBkFOaMgZxS6uqCn1tyuH2Pwl7Mb3SuLurdqQXtGQc4oyBkFOaNwcT5g0GBndvCz2bTEve2D1AXxnyJnFOSMgpxROJoPuLcgYHBLnHvvuAdHCfcmHl4yWaI9oyBnFOSMgpxR+Mk4IHtfPDikuLczzztfxK9lQ5k17RkFOaMgZxTkjMLR+QH3XqZ/GNzk5yWHDQx2sbMlDiePoT2jIGcU5IyCnFE4Ok94sD+evR//8M4KnMGnGvw/n3wp2jMKckZBzijIGYW9uqAPWS9y8L4fnlqBvPUY91ZLnHzW+gBeR84oyBkFOaMwuW/oUwtWt2Tb62e/vHZvmfQW7RkFOaMgZxTkjMLeecJrJ6X3W4Ux987Vujd5sPXL2Ygq21tJe0ZBzijIGQU5o/CTccBWH3Ore36vQ/rUFkDZ8Qn3FiSbD+B7kzMKckZBzigc7Ru6dq8E5d6S4+zN+1q2THp930HaMwpyRkHOKMgZhcn9grZqe0563Ce7e27JivpPOuD3Kp0Gpwe0ZxTkjIKcUZAzCkd1QSee6rwPjiEGByvr+w5e6kO2llt7RkHOKMgZBTmjcLRv6NrgbpeDN7rX1R2s/Lm3P9KgrYfUnlGQMwpyRkHOKOzVBQ3WrZ8UAq0vtf7sS96tD3bPs7Haej22+QCeJ2cU5IyCnFE4Wh+wdnLO7cmVTz57MgFw7837S2ZHrA/g7eSMgpxRkDMKF88TvvcG/FsUAt07BDjbPmiL+QCeJ2cU5IyCnFGYrAsa3Nf+3qBhsPN+b0pjsEoq+z+vac8oyBkFOaMgZxSO6oLurQTOqoayY7bunWqwdd+naM8oyBkFOaMgZxQu7ht6rzDmxL3jzE4MzkO85Ky3D9ozCnJGQc4oyBmFn4wD3nmS7VOlL4NnD2SnjJ305Z0fwDcjZxTkjIKcUThaH3Di3rlaWcnN+lIfBh8jG0Oc3PeD9oyCnFGQMwpyRuFofUDWIb23n+VLDvDKDhA+cfJU2jMKckZBzijIGYWL5wfck9W6nFzqpKhmcFOjl+yEqj2jIGcU5IyCnFF46Tgge8V/0vEfHDTc22N1sMb/hPaMgpxRkDMKckbhsX1Dt9zb1eclh509tS/Th3s1RdozCnJGQc4oyBmFvXFAtn1QVhF/8jJ9cAwxuBD6XonRB+sDeB05oyBnFOSMwo+vr6+nn4H/Pu0ZBTmjIGcU5IyCnFGQMwpyRkHOKMgZhX8BLbGtNN7W9XMAAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14288</span>
+    <span class="fc-proj">Babi GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/alexandre-eduardo-pereira-de-azevedo/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#FF6B6B"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#FF6B6B22;color:#FF6B6B;border:1px solid #FF6B6B44">RF</div>
+    <div class="fc-info">
+      <div class="fc-name">Renan Jun Furuya</div>
+      <div class="fc-skill" style="color:#FF6B6B">QA</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKUAAAClCAIAAACySaqNAAADiElEQVR4nO3dPW5bMRBF4ThIky4byP4X5g2kS+mUAliMNJ4Zks45Xyvp8dkXBAb8ffv4+PgmjO+nX0BbmTeLebOYN4t5s5g3i3mzmDeLebP8iD/++ev3nvf4++f906+x/Hb5cuXTirknp9pd2L9ZzJvFvFnMm+VJvbaIa4GUSv1yqkCrFJWpR6Wk2rV/s5g3i3mzmDdLrl5bzFUojSVYpTJKFWiVhrbVevZvFvNmMW8W82Yp1WvbVMbIKgN5cbuNY2Tb2L9ZzJvFvFnMm+Vr1GuxuZG7+LeNb7WN/ZvFvFnMm8W8WUr12p0lSWqasnFOs2Jbu/ZvFvNmMW8W82bJ1WvbNjkutq1Q27Zu7tR/0v7NYt4s5s1i3ixP6rVLRtAumYic21u6jf2bxbxZzJvFvFne4vsNTp1WFr9G42/jR5067aPSUMz+zWLeLObNYt4sg/sNGrcB3DlkFms8YC7VkOfl6sG8WcybxbxZnoyvxSrryC4Zb9o2p3nJxgb7N4t5s5g3i3mzHLuPau4CqsqX498uGmdatx0IbP9mMW8W82Yxb5bS+Nri/xsy23aRQtzuwvVrepV5s5g3i3mz5PYbxBprn7mGUrYNLzbOLLt+TQ/mzWLeLObN0lmvLeZmPCvzofFrbCs5F41/Ucz+zWLeLObNYt4spfM8UuaOk71kaVjKthpzYf9mMW8W82Yxb5bB9WuXLA2bm2rc9uSF42t6lXmzmDeLebPs2x+aqm7mjs+NVe57r/yvGm+hd/2aHsybxbxZzJsld15upY6IP71k62VsrhJsvAI1Zv9mMW8W82Yxb5Z969dSTo2gndpv0PgaMfs3i3mzmDeLebMM3kcVS11AlSqFGp88d55HivOh+iTzZjFvFvNm6dxv0OjOexXiR32J27ns3yzmzWLeLObNcuw+qkXqgvfG1fnxazROgDbOLLs/VK8ybxbzZjFvltJ+g4rKHN9csTO3Xi/1qLl1gvZvFvNmMW8W82YprV9rvERqW7uV1W2pL88dhRJzPlQP5s1i3izmzXJsv0HKnVsvT52XW2H/ZjFvFvNmMW+Wr1GvpTTWPtt+u+1UOPs3i3mzmDeLebOU6rW5ZVaVsaq5wbhT9703NmT/ZjFvFvNmMW+W3Hm5c7ZdoDm3P7TxpJCY+0P1KvNmMW8W82a59Pw1DbF/s5g3i3mzmDeLebOYN4t5s5g3i3mz/ANQPxEpjHLakwAAAABJRU5ErkJggg==" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-13379</span>
+    <span class="fc-proj">Melhorias URA — Hiperpersonalização e GenAI</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/renan-furuya/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#FF6B6B"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#FF6B6B22;color:#FF6B6B;border:1px solid #FF6B6B44">BF</div>
+    <div class="fc-info">
+      <div class="fc-name">Bruno Chagas Ferreira</div>
+      <div class="fc-skill" style="color:#FF6B6B">QA</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEdUlEQVR4nO3dMY4bMRAEQJ/hxJk/4P8/zB9w5lDOGVBNDIdcAVXpSbvUqUEMKO7w6/V6fYPA99sD4GPICilZISUrpGSFlKyQkhVSskJKVkj9mP/556/fZ8bx7++ffBhLL166b9/nnd9o4yeqmA/DvEJKVkjJCilZIfWmth3Ma58lt6rI+TAqFej8yhtvdOtbMK+QkhVSskJKVkit1baDygrp0pU3lpyVwrBSj/eVq33fwsC8QkpWSMkKKVkhVaptj6n8gl/ZdVDZKrBxl8VDmFdIyQopWSElK6Q+o7ZdWrddWiHdWDXPVbZGPIR5hZSskJIVUrJCqlTbHivBHrIUO1dZxq049i2YV0jJCilZISUrpNZq22MP7A+WFluP/XVu430Ht74F8wopWSElK6RkhdSb2vaZP44PKk0GNjYo6Gsn9pBvwbxCSlZIyQopWSG11t/2WPm2sfXBxm0GlVHNW4ItDaNCnwROkBVSskJKVkitrdtufJiq7yf7wbE9Ccc+0dJ955aGYV4hJSukZIWUrJD6er1e+asfcmzXxqe2Nparx648v1FfEW1eISUrpGSFlKyQ2tkDbGMDrb5HvPpWZueOreouNRsbWLdlD1khJSukZIXU2n7bYy/u20JbeVrsVpevpWEMNm6RNq+QkhVSskJKVkid62+7tFJZWT/te/6t7zy0jSc79O0bMa+QkhVSskJKVkit1ba3fpQf9D2INb/RxmFsrLj7NiEMzCukZIWUrJCSFVI7120rlWDfRte+vgFLNzp2LlnfMMwrpGSFlKyQkhVSb/ok3PoFf+MwBrdaEGz8T/a1ifAsGXvICilZISUrpNZ6gA2Otbm6NYy+mvrWlSv/DfMKKVkhJSukZIVUqb9tpT7tO8rh1gkLx/rMbty/Yb8tLWSFlKyQkhVSa3sSbp2hML/ysZ/75+8d3PpElRtZt2UPWSElK6RkhdTambsbX/zM0m9+38G8MLzVvWF+Kf1tOUFWSMkKKVkh1bhuO7jVlXXJRyxM33oczrxCSlZIyQopWSFVqm2PvXju1mENS8NYem/fMCqDNK+QkhVSskJKVkjtrG3n7x0ce7q/MqqlS21c8+3bdWDdlhNkhZSskJIVUueeJes7U+DYT/aDYzda0ndIhHmFlKyQkhVSskKq1N+2z7HTfDd2F6sMcv7iub7POzCvkJIVUrJCSlZIvemTcKsjQeUn+75HvJZutPFfd2xv8px5hZSskJIVUrJC6k1tOzh2mFjfbofKwmWlmL31SNtG5hVSskJKVkjJCqm12nawsQfY0ns3Pi7V1wmhcuVnnvVrXiElK6RkhZSskCrVtsf0Pft/bGPvxisP+h6lG5hXSMkKKVkhJSukPqO27XsQa+PG3sqS6MYdGvP3VlbPzSukZIWUrJCSFVKl2rav3dSt0woqlWDfuu3GG1WYV0jJCilZISUrpNb62/bpO8138ImHpx07gnfOvEJKVkjJCilZIfXQ/rY8kHmFlKyQkhVSskJKVkjJCilZISUrpGSF1H8iSSce2zcYRQAAAABJRU5ErkJggg==" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-13379</span>
+    <span class="fc-proj">Abertura de Conta via WhatsApp</span>
+    <span class="fc-tipo fc-bs">bodyshop</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Joice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/bruno-chagas-489447113" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div></div>
+
+    <!-- EMPTY ROWS -->
+    <div class="empty-section"><div class="es-title">🔍 Vagas em Seleção — 11 posições</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#2EC4A022;border:1px solid #2EC4A044">
+      <span style="color:#2EC4A0;font-size:9px;font-weight:700">GEN</span>
+    </span>
+    <div>
+      <div class="er-equiv">Dev Genesys Pleno</div>
+      <div class="er-req">COUPA-14358 · Melhorias URA — Hiperpersonalização e GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#f8982022;border:1px solid #f8982044">
+      <span style="color:#f89820;font-size:9px;font-weight:700">JAV</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Java Sênior</div>
+      <div class="er-req">COUPA-14286 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#f8982022;border:1px solid #f8982044">
+      <span style="color:#f89820;font-size:9px;font-weight:700">JAV</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Java Sênior</div>
+      <div class="er-req">COUPA-14201 · Melhorias URA — Hiperpersonalização e GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#f8982022;border:1px solid #f8982044">
+      <span style="color:#f89820;font-size:9px;font-weight:700">JAV</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Java Sênior</div>
+      <div class="er-req">COUPA-14201 · Melhorias URA — Hiperpersonalização e GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#f8982022;border:1px solid #f8982044">
+      <span style="color:#f89820;font-size:9px;font-weight:700">JAV</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Java/Genesys Sênior</div>
+      <div class="er-req">COUPA-14201 · Melhorias URA — Hiperpersonalização e GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python Pleno</div>
+      <div class="er-req">COUPA-14286 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python Pleno</div>
+      <div class="er-req">COUPA-14288 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python Júnior</div>
+      <div class="er-req">COUPA-14288 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#6b88aa15;color:#6b88aa;border:1px solid #6b88aa33">Júnior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python Pleno</div>
+      <div class="er-req">COUPA-14286 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python Pleno</div>
+      <div class="er-req">COUPA-14288 · Babi GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#3776ab22;border:1px solid #3776ab44">
+      <span style="color:#3776ab;font-size:9px;font-weight:700">PYT</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor Python/GenAI Sênior</div>
+      <div class="er-req">COUPA-14358 · Melhorias URA — Hiperpersonalização e GenAI</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div></div>
+  </div>
+</div>
+
+<div class="gsec" id="gsec-rs">
+  <div class="page">
+    <!-- BANNER -->
+    <div class="gbanner" style="background:linear-gradient(135deg,#8B6FC920 0%,#8B6FC908 100%);border:1px solid #8B6FC933;">
+      <div class="gb-body">
+        <div class="gtag" style="background:#8B6FC918;color:#8B6FC9;border:1px solid #8B6FC940">☁️ Gestor · Rodrigo Silva</div>
+        <div class="gname">Rodrigo Silva</div>
+        <div class="gdesc">Copilot & Cockpit Atendente Salesforce</div>
+        <div class="proj-pills"><span class="proj-pill">Copilot & Cockpit Atendente Salesforce</span></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n" style="color:#8B6FC9">2</span><span class="gs-l">Total Vagas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">2</span><span class="gs-l">Preenchidas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316">0</span><span class="gs-l">Em Seleção</span></div>
+        <div class="gs"><span class="gs-n" style="color:#8B6FC9" title="rodrigo.fsilva@inter.co">📧</span><span class="gs-l">Joice</span></div>
+      </div>
+    </div>
+
+    <!-- FILLED CARDS -->
+    <div class="section-title">✅ Candidatos Identificados</div>
+    <div class="mems"><div class="fc">
+  <div class="fc-stripe" style="background:#512bd4"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#512bd422;color:#512bd4;border:1px solid #512bd444">MA</div>
+    <div class="fc-info">
+      <div class="fc-name">Marlon Graciano Machado de Amorim</div>
+      <div class="fc-skill" style="color:#512bd4">.Net / Salesforce</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEWUlEQVR4nO3dO44rNxAFUI/hxNnbwNv/wrwBZw7HeQecSxSr2ALOSSV1S9BFoUTx8/X9/f0HBP68/Qb4GLJCSlZIyQopWSElK6RkhZSskJIVUn+tH/771++Z9/Hfv/8s7vt4dEvfRzj4rtaXuvUtPKgrpGSFlKyQkhVSP/S2D5Vu7mHdr61b3bWtN7l1o4NPrvTyY9/Cg7pCSlZIyQopWSG119s+9LWc69dWOsHHa7dazq3Pu37ywaHYsW9BXSElK6RkhZSskCr1tn0O/mX/eO3BS1XeZGVg+hZ1hZSskJIVUrJC6qW97UOlMaxM3a3MK1j7iGb2QV0hJSukZIWUrJAq9bYHJ35u3agyunpwRu3WpfqM3UhdISUrpGSFlKyQ2utt3znaeHDV1sFHHw6uJbv1LagrpGSFlKyQkhVSX+88u6FvSLRvJu/WjV4y5rtFXSElK6RkhZSskPqht61MVu1bPdW3CVbfBNtbKg34g7pCSlZIyQopWSG1N257sJvr+9u90oBXbtS3bULfJ9q6srpCSlZIyQopWSF18uyGykYB6526Ds4NWOuborCl71KVXl5dISUrpGSFlKyQKs1JGDuY6+DcgFuHeq3fxthHqLTn6gopWSElK6RkhdTJtWRjq6fGmsq+RWt9PwvWl6pQV0jJCilZISUrpE6O275kdf/YbltjS8sOjnFXqCukZIWUrJCSFVKltWRjp8yOTb8dWwB2az7D+lJr6gopWSElK6RkhVRpTsLYYv++175kzuzYmG+FukJKVkjJCilZIbU3J2Ht4JzZsbm6Y0PPW/omIVR+NKgrpGSFlKyQkhVSJ89uuHXW1sEB077GcH2ph74rV26krpCSFVKyQkpWSO3tb7vV3PVtc9U3nDq2ke6Wyruyvy0XyAopWSElK6Tesk/CO8de+xaeVW50a3sKdYWUrJCSFVKyQmruzN2x4xjGWt2xJ9vflg8jK6RkhZSskPphTkLfuG3ln/SXHKmwvvLWo2OntFlLxgRZISUrpGSF1A+97VYH+nCwi6x0zQenwa4/0a3ZuA99UxTUFVKyQkpWSMkKqb21ZBW3trs9eNjt2q0x37Hpt+oKKVkhJSukZIXUyf1t1z5i24SxHWz79P1oUFdIyQopWSElK6RK55L16et8D3rJ/rZjK83UFVKyQkpWSMkKqb21ZH0OTuxdv/YlO9j2LQDr2/xXXSElK6RkhZSskDp5LtmWsQPBxoY1xzbDvfVadYWUrJCSFVKyQqq0lqzveNeDe4+NnfU7djza1muN23KBrJCSFVKyQmpun4QtB/e37ZuEMHbCQl+ru0VdISUrpGSFlKyQemlvu3Zw3HZry9qxk3H7zn+rUFdIyQopWSElK6RKvW3f3/2VG401lbdGk7c4c5cLZIWUrJCSFVJz+9uujf2DP7YOraIyBNz3ZHWFlKyQkhVSskLqpfvb8kLqCilZISUrpGSFlKyQkhVSskJKVkjJCqn/ATvpB7DTYacSAAAAAElFTkSuQmCC" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-5653</span>
+    <span class="fc-proj">Copilot & Cockpit Atendente Salesforce</span>
+    <span class="fc-tipo fc-bs">bodyshop</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/marlon-graciano-46172450/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#512bd4"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#512bd422;color:#512bd4;border:1px solid #512bd444">AL</div>
+    <div class="fc-info">
+      <div class="fc-name">Anderson Modesto da Luz</div>
+      <div class="fc-skill" style="color:#512bd4">.Net / Salesforce</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#0096D622;color:#0096D6;border-color:#0096D644">Sênior</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEY0lEQVR4nO3dMXIcOQwFUNvlxNleYO9/sL3AZg7lvAPoswCSLdd76cx090i/WBBFgt8/Pj6+QeDH7Qfgy5AVUrJCSlZIyQopWSElK6RkhZSskPpZv/zrn3/PPMfv//+bulT9zPWNBr/v0o2OPVWtfgzjCilZISUrpGSF1Ce17cOxCrR+c/0Yj1cfn+3UiUtfv37m+iGXvmDH0k/DuEJKVkjJCilZIbVW2z4sVUaDhWHnzUtF5WBdvFTqdq5c69zIuEJKVkjJCilZIdWqbY8ZLHXrSnBfTb1UJg/OzA4yrpCSFVKyQkpWSH2N2rZjqdQdLGaXvLOYfTCukJIVUrJCSlZItWrbYxVZZyHBQ+fV2q2p2GO/BeMKKVkhJSukZIXUWm17bMP+oE5dvFQ177vvw63fgnGFlKyQkhVSskLq+zvPbliaA+0sFRj87KB3LlEwrpCSFVKyQkpWSK31t+3MY9YG+wY87Gtu8HBsh1uHPgmcICukZIWUrJC6tpfsJS3Blj472JN3cFvaYJns7AZmyAopWSElK6Ra622XqqrOm2vHmsMu3bfTZnfpUoO/lJpxhZSskJIVUrJC6pP1trfOoK0/O7gf7CV7um6d3bD0fY0rpGSFlKyQkhVSa7XtO7daHWu+NTi7Wn92X7uGDuMKKVkhJSukZIXUJ2sS9q0DPXZKwr7Z1VvF+76/MMzbMkNWSMkKKVkhNbmXbPAf+oMrefetOuhceXC1w7F+acYVUrJCSlZIyQqptR5gtb9gt9jg5PKxPgm1wRsZV0jJCilZISUrpCbPbhjsObCvIcOxkx3qSy3Z90eDvWRsISukZIWUrJBq1bb7Jh+P9Su41QnhnVdW2zJDVkjJCilZIbWxB9hLdve/syXYsZa1+ttygayQkhVSskJqbS9Z5wisW7O6tcFv9JL1tvu6NxhXSMkKKVkhJSukzp1LtnSp+s1LlxqsfJeeal/L2iWDNzKukJIVUrJCSlZITa5J2LfVat8JtZ0b1W4dlLuvj7BxhZSskJIVUrJCauOahNq+dQVLb348xq1TEm4drWa9LVvICilZISUrpFpn7u7biHXrcN+/4IDemv62nCArpGSFlKyQap1LdmxJaafyHVzJu3Tlzi612rEVCw/GFVKyQkpWSMkKqcmzGwbtW4667761W+cvDM6tG1dIyQopWSElK6Qmz9zt6PTT6ji2W+wla5PN23KCrJCSFVKyQqq1l6xjX2/cwYUES68e6+NV2zepbVwhJSukZIWUrJBqrbe91SFscKHr4H//B5t+HTuR17wtW8gKKVkhJSukWrXtMZ1ydd9BuYOfPXbWb/1Z622ZISukZIWUrJD6GrXtYBuBh2O9uPa9Otg1omZcISUrpGSFlKyQmuwBNmjwP+n7TgIetO9It8EbGVdIyQopWSElK6Qmz9zt6Kw6ONZF4dbKgdrgkuGacYWUrJCSFVKyQuql/W15IeMKKVkhJSukZIWUrJCSFVKyQkpWSMkKqT8Oo/GB+LDFcwAAAABJRU5ErkJggg==" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-5653</span>
+    <span class="fc-proj">Copilot & Cockpit Atendente Salesforce</span>
+    <span class="fc-tipo fc-bs">bodyshop</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Evelin Brito</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/andersonmodestosistemas/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div></div>
+
+    <!-- EMPTY ROWS -->
+    
+  </div>
+</div>
+
+<div class="gsec" id="gsec-sb">
+  <div class="page">
+    <!-- BANNER -->
+    <div class="gbanner" style="background:linear-gradient(135deg,#2EC4A020 0%,#2EC4A008 100%);border:1px solid #2EC4A033;">
+      <div class="gb-body">
+        <div class="gtag" style="background:#2EC4A018;color:#2EC4A0;border:1px solid #2EC4A040">💳 Gestor · Samuel Barboza</div>
+        <div class="gname">Samuel Barboza</div>
+        <div class="gdesc">Squad Cartão — Ativação & Produtos Financeiros</div>
+        <div class="proj-pills"><span class="proj-pill">Squad Cartão — Ativação</span><span class="proj-pill">Squad Cartão — Produtos Financeiros</span></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">2</span><span class="gs-l">Total Vagas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">0</span><span class="gs-l">Preenchidas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316">2</span><span class="gs-l">Em Seleção</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0" title="samuel.barboza@inter.co">📧</span><span class="gs-l">Joice</span></div>
+      </div>
+    </div>
+
+    <!-- FILLED CARDS -->
+    
+    <div class="mems"></div>
+
+    <!-- EMPTY ROWS -->
+    <div class="empty-section"><div class="es-title">🔍 Vagas em Seleção — 2 posições</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Sênior</div>
+      <div class="er-req">COUPA-14209 · Squad Cartão — Ativação</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#0096D615;color:#0096D6;border:1px solid #0096D633">Sênior</span>
+    <span class="er-tipo er-bs">bodyshop</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Especialista</div>
+      <div class="er-req">COUPA-14210 · Squad Cartão — Produtos Financeiros</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#D4E60015;color:#D4E600;border:1px solid #D4E60033">Especialista</span>
+    <span class="er-tipo er-bs">bodyshop</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div></div>
+  </div>
+</div>
+
+<div class="gsec" id="gsec-tr">
+  <div class="page">
+    <!-- BANNER -->
+    <div class="gbanner" style="background:linear-gradient(135deg,#D4E60020 0%,#D4E60008 100%);border:1px solid #D4E60033;">
+      <div class="gb-body">
+        <div class="gtag" style="background:#D4E60018;color:#D4E600;border:1px solid #D4E60040">📱 Gestor · Tiago Rentes</div>
+        <div class="gname">Tiago Rentes</div>
+        <div class="gdesc">Subscription + Padronização e Personalização de Banners</div>
+        <div class="proj-pills"><span class="proj-pill">Subscription</span><span class="proj-pill">Padronização e personalização dos banners</span></div>
+      </div>
+      <div class="gstats">
+        <div class="gs"><span class="gs-n" style="color:#D4E600">7</span><span class="gs-l">Total Vagas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#2EC4A0">2</span><span class="gs-l">Preenchidas</span></div>
+        <div class="gs"><span class="gs-n" style="color:#F97316">5</span><span class="gs-l">Em Seleção</span></div>
+        <div class="gs"><span class="gs-n" style="color:#D4E600" title="tiago.rentes@inter.co">📧</span><span class="gs-l">Joice</span></div>
+      </div>
+    </div>
+
+    <!-- FILLED CARDS -->
+    <div class="section-title">✅ Candidatos Identificados</div>
+    <div class="mems"><div class="fc">
+  <div class="fc-stripe" style="background:#512bd4"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#512bd422;color:#512bd4;border:1px solid #512bd444">MR</div>
+    <div class="fc-info">
+      <div class="fc-name">Marcus Rodrigues</div>
+      <div class="fc-skill" style="color:#512bd4">.Net</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#8B6FC922;color:#8B6FC9;border-color:#8B6FC944">Pleno</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEZElEQVR4nO3dMZITMRAFUKBIyLgA9z8YFyAjNPkE8ld1t2ZMvZd6rZm1f6l6tZrW19fr9QUC3+6+AT6GrJCSFVKyQkpWSMkKKVkhJSukZIXU9/XLP37+OnMff//87hrqcs9bI6/fu/VprK+7dZMP+RbMK6RkhZSskJIVUm9q24u5CrRRpZhtvNB65HXVvB75rm/BvEJKVkjJCilZIbVX2140rmNWRt66bmMxO3eTW+a+hQvzCilZISUrpGSFVKm2PaaxLp6rIreWceduco55hZSskJIVUrJC6jNq261tsI17Vy9DVbbQzq35HmNeISUrpGSFlKyQKtW2x5YX5/YVrFUK4a1St+LYt2BeISUrpGSFlKyQ2qttn7nauFVUfuKrF3d9C+YVUrJCSlZIyQqpN7XtMzd+VgrDueteVF5dX/cu5hVSskJKVkjJCqm9/rbHGgVULjTXCaHSmqvyST6kIYN5hZSskJIVUrJCqrQn4SPWT7c01pjHPqvGMtnZDfSQFVKyQkpWSH19vV6Ll4/106rsTl3f1V2LnnNnN6wvVPms1swrpGSFlKyQkhVSneeSNXYVOPbei7m9AY0Pj931pJl5hZSskJIVUrJC6lyfhMYttFurjce20G5dd+2uHQtr5hVSskJKVkjJCqk3exLW5raUNp4ANveI19yWjMoPr9+7Zr8tPWSFlKyQkhVSpdr24ti/zhs351aue/GQw9Pm/uAwr5CSFVKyQkpWSHX2Sai8d67L17Gl2GNdI7b2UTTehnmFlKyQkhVSskJqr0/C3H/DL46tRR7r1HWs80Pjr39hXiElK6RkhZSskNrbk3Ds6f7GfQWNC6Z3PUp3bGS1LT1khZSskJIVUoO17fq9jR7ylNrcMboP2YNhXiElK6RkhZSskOrsk3Axt2B67KCHxk0Ia3c9Hbe+jQvzCilZISUrpGSF1JtnyY6tRT6kfGtsaPsR5eoW8wopWSElK6RkhVTpXLJLRfaQ1dVjZ4utR37ID695lowRskJKVkjJCqm92nZt7gn9xts41vpg664qI1dqefttGSErpGSFlKyQKtW2x3pTVYba8pATwNYjz/36a+YVUrJCSlZIyQqpUm3b2HPgIeZaHzTulJgrotfMK6RkhZSskJIVUp1n7jY6dkJtZagtd52/0Hg4hXmFlKyQkhVSskKqs09CxbrJQGWo9QNvlZG3VK571x7hC/MKKVkhJSukZIVUqU9Cxdb/6OdK3a0fPnZu7vq9a3P9fM0rpGSFlKyQkhVSb/YkzJ3EddfIa3c9taW/Lf8VWSElK6RkhVRnD7C7zBWzxw7orZTnx04CNq+QkhVSskJKVkj9D7Vt4xlfc50f5l5t7Ku7Zl4hJSukZIWUrJDq7G/baKuKPLZwub6NisZ1260LbTGvkJIVUrJCSlZI7dW2x9omzJ3dUDmgt7JCete67XoofRIYISukZIWUrJB6aH9bHsi8QkpWSMkKKVkhJSukZIWUrJCSFVKyQuoftE7i830rAF0AAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-14235</span>
+    <span class="fc-proj">Subscription</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Greice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/marcus-rodrigues-dev/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div><div class="fc">
+  <div class="fc-stripe" style="background:#f89820"></div>
+  <div class="fc-head">
+    <div class="fc-av" style="background:#f8982022;color:#f89820;border:1px solid #f8982044">EM</div>
+    <div class="fc-info">
+      <div class="fc-name">Ellisson Mateus Resende Moraes</div>
+      <div class="fc-skill" style="color:#f89820">Java</div>
+      <div class="fc-badges">
+        <span class="mb mb-act">Talento ACT</span>
+        <span class="mb mb-nv" style="background:#8B6FC922;color:#8B6FC9;border-color:#8B6FC944">Pleno</span>
+      </div>
+    </div>
+    <div class="fc-qr"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAC5CAIAAAD7zwkLAAAEXklEQVR4nO3dMXIkNwwFUK/LyWa+gO9/sL2Asw3lnAH1WQDRPa730tF0t6RfLAyHBH98fX39AYE/n34APoaskJIVUrJCSlZIyQopWSElK6RkhdRf+5d//v3PzHP8/vdX16WWZz668v69lb/G/lL7h3zJf8G4QkpWSMkKKVkh9U1tu7hXgVbeuzxVpZg9UilIK6XuU/8F4wopWSElK6RkhdRZbbs4qowaS85KcXdv7vXovpV6fH/lvcqNjCukZIWUrJCSFVKl2vYplVUH99YGHF35XvF+j3GFlKyQkhVSskLqM2rbxgnTox8+ml09KmbfWb3uGVdIyQopWSElK6RKte1TBdpR2Ti2ieupedux/4JxhZSskJIVUrJC6qy2Hduwv3dvhrRy5cZXjx5yjHGFlKyQkhVSskLqxzvPbhjbH7W/71hrro9YomBcISUrpGSFlKyQ+qa2vdfvddHYKKDx2//GCeLG5Q0V+iQwQVZIyQopWSE1tybhqW6wjY/x1NkNlSsvKpW+cYWUrJCSFVKyQuqxPgljM8L7+x75H0wuH115YVwhJSukZIWUrJA6W287tolrMXapsW//G+dtx57ZuEJKVkjJCilZIXVxL9lY34C9xm4Gi7F+BY3LOSqMK6RkhZSskJIVUt+sSbh34sA7zwd76vSwykPe28O2MK6QkhVSskJKVkh1rknY//De2Hrbipc0VXjqeDTjCilZISUrpGSFVGcPsLEtT/dW1L5kKvbexwI9wJggK6RkhZSskCrVtntjxexe432f2vF1r3o9+gWNK6RkhZSskJIVUhd7gI11dN2rVIJPldiLsc8Be8YVUrJCSlZIyQqp0tkNY/1e720AazwGonHX1tEvqL8tryMrpGSFlKyQKs3b3tu21PgYRz9c6UhwVIHu31th3pbnyQopWSElK6S+qW0r57k2Hl4wVibf24f2VKvcxj+scYWUrJCSFVKyQupsL9libId+Y9+AlywkqHjqQ4NxhZSskJIVUrJC6mxNwlMtshqNLRle3GtfcER/WybICilZISUrpC72Sdir7NpaNK5sbex51qjyOaBxGYlxhZSskJIVUrJCqrO2HasE71WvH7Fi4V5/2z3jCilZISUrpGSF1NmZu2Ma+3jdOyd4b+x4tHvd1BbGFVKyQkpWSMkKqW/mbe99z744mj+9N51audRe4zz12BrhhXGFlKyQkhVSskLqLXvJ9q+OTcU2npIwttphca9bhXGFlKyQkhVSskKq8+yGvbGzGyr3vTdDumicmN5r7NNmXCElK6RkhZSskHqsT8KRe1/oNx5Ye+/Y4LGJ6T3jCilZISUrpGSF1GfUto0qHbMqNea9VyuTy9bbcoWskJIVUrJCqlTbvvPs23v3PXrvvbPUFmMrQ4wrpGSFlKyQkhVSZ7XtWNuExiO/Gg8+qJw3UZmZbXwqfRKYICukZIWUrJB6aX9bXsi4QkpWSMkKKVkhJSukZIWUrJCSFVKyQuo/vETylTXarcoAAAAASUVORK5CYII=" alt="QR" width="48" height="48"><span class="fc-qr-lbl">LinkedIn</span></div>
+  </div>
+  <div class="fc-meta">
+    <span class="fc-req">COUPA-13782</span>
+    <span class="fc-proj">Padronização e personalização dos banners</span>
+    <span class="fc-tipo fc-sq">Squad</span>
+  </div>
+  <div class="fc-foot">
+    <span class="fc-rec">👤 Joice</span>
+    <a class="fc-li" href="https://www.linkedin.com/in/ellissonmateus/" target="_blank"><svg style="width:11px;height:11px;flex-shrink:0" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+  </div>
+</div></div>
+
+    <!-- EMPTY ROWS -->
+    <div class="empty-section"><div class="es-title">🔍 Vagas em Seleção — 5 posições</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#512bd422;border:1px solid #512bd444">
+      <span style="color:#512bd4;font-size:9px;font-weight:700">.NE</span>
+    </span>
+    <div>
+      <div class="er-equiv">Desenvolvedor .NET Pleno</div>
+      <div class="er-req">COUPA-14235 · Subscription</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Pleno</div>
+      <div class="er-req">COUPA-14207 · Padronização e personalização dos banners</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Pleno</div>
+      <div class="er-req">COUPA-14207 · Padronização e personalização dos banners</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Pleno</div>
+      <div class="er-req">COUPA-14207 · Padronização e personalização dos banners</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div><div class="er">
+  <div class="er-left">
+    <span class="er-dot" style="background:#00a1e022;border:1px solid #00a1e044">
+      <span style="color:#00a1e0;font-size:9px;font-weight:700">MAR</span>
+    </span>
+    <div>
+      <div class="er-equiv">MKT Cloud Engagement Pleno</div>
+      <div class="er-req">COUPA-14207 · Padronização e personalização dos banners</div>
+    </div>
+  </div>
+  <div class="er-right">
+    <span class="er-nv" style="background:#8B6FC915;color:#8B6FC9;border:1px solid #8B6FC933">Pleno</span>
+    <span class="er-tipo er-sq">Squad</span>
+    <span class="er-status">Em seleção</span>
+  </div>
+</div></div>
+  </div>
+</div>
+
+<div class="cta">
+  <div class="cta-in">
+    <div>
+      <div class="cta-h">Squad Inter<br><em>em movimento.</em></div>
+      <p class="cta-s">15 candidatos identificados, 20 vagas em processo de seleção. ACT Digital conduzindo todas as frentes com agilidade e qualidade.</p>
+    </div>
+    <a class="btn btn-p" href="mailto:comercial@actdigital.com">📩 Falar com ACT Digital</a>
+  </div>
+</div>
+
+<script>
+function go(id,btn){
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.gsec').forEach(s=>s.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('gsec-'+id).classList.add('on');
+  window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
